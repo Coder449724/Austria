@@ -34,11 +34,17 @@
     text-align: center;
     font-size: 24px;
     position: relative;
-    transition: filter 0.5s ease;
+    transition: filter 0.3s ease;
+  }
+
+  /* Animierter Pulsierender Blur (leicht flackern) */
+  @keyframes pulsateBlur {
+    0%, 100% { filter: blur(5px); }
+    50% { filter: blur(8px); }
   }
 
   #iphone.blurred {
-    filter: blur(6px);
+    animation: pulsateBlur 1.5s infinite;
   }
 
   #introText {
@@ -76,14 +82,20 @@
     50% { opacity: 0.5; }
   }
 
+  /* Tipp-Effekt für Text */
   #screenText {
     white-space: pre-line;
     font-size: 14px;
     color: #0f0;
     font-weight: normal;
     text-align: left;
+    min-height: 120px;
+    max-height: 460px;
+    overflow-y: auto;
+    font-family: 'Courier New', Courier, monospace;
   }
 
+  /* Totenschädel mit Fade In */
   #skull {
     position: absolute;
     top: 50%;
@@ -94,6 +106,13 @@
     display: none;
     pointer-events: none;
     user-select: none;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes fadeInSkull {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   /* Footer mit Copyright links und Buttons rechts */
@@ -164,28 +183,45 @@
 
   let currentTimeout = null;
   let lineIndex = 0;
+  let charIndex = 0;
   let isRunning = false;
+
+  // Text Tipp-Effekt Funktion
+  function typeLine(line, callback) {
+    if (charIndex < line.length) {
+      screenText.textContent += line.charAt(charIndex);
+      charIndex++;
+      currentTimeout = setTimeout(() => typeLine(line, callback), 50);
+    } else {
+      screenText.textContent += "\n";
+      charIndex = 0;
+      callback();
+    }
+  }
 
   function showHackLines(lines) {
     if (lineIndex >= lines.length) {
-      // Am Ende Totenschädel anzeigen & Display verschwimmen lassen
-      screenText.textContent += "\n";
+      // Totenschädel einblenden mit Animation & Blur animieren
       skullDiv.style.display = "block";
+      skullDiv.style.animation = "fadeInSkull 1s forwards";
       iphoneDiv.classList.add('blurred');
       isRunning = false;
       return;
     }
-    screenText.textContent += lines[lineIndex] + "\n";
-    lineIndex++;
-    currentTimeout = setTimeout(() => showHackLines(lines), 1500);
+    typeLine(lines[lineIndex], () => {
+      lineIndex++;
+      setTimeout(() => showHackLines(lines), 500);
+    });
   }
 
   function startHack() {
     isRunning = true;
     lineIndex = 0;
+    charIndex = 0;
     screenText.textContent = "";
     introTextDiv.style.display = "none";
     skullDiv.style.display = "none";
+    skullDiv.style.animation = "";
     iphoneDiv.classList.remove('blurred');
     screenText.style.display = "block";
     showHackLines(hackLines);
@@ -197,6 +233,7 @@
     screenText.style.display = "none";
     introTextDiv.style.display = "flex";
     skullDiv.style.display = "none";
+    skullDiv.style.animation = "";
     iphoneDiv.classList.remove('blurred');
     screenText.textContent = "";
   }
@@ -214,7 +251,6 @@
   setTimeout(() => {
     startHack();
   }, 5000);
-
 </script>
 
 </body>
