@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Hacking iPhone Screen</title>
 <style>
-  /* Ganz schwarzer Hintergrund und Zentrierung */
   body, html {
     margin: 0; padding: 0; height: 100%;
     background-color: black;
@@ -14,12 +13,12 @@
     align-items: center;
     font-family: monospace;
     color: #0f0;
+    flex-direction: column;
   }
 
-  /* iPhone Kasten in der Mitte */
   #iphone {
-    width: 300px;
-    height: 600px;
+    width: 260px;
+    height: 520px;
     border: 12px solid #333;
     border-radius: 40px;
     box-shadow: 0 0 20px #0f0;
@@ -27,17 +26,47 @@
     padding: 20px;
     overflow-y: auto;
     white-space: pre-wrap;
-    display: none; /* Erst nach Loading sichtbar */
+    margin-bottom: 20px;
   }
 
-  /* Loading Screen */
   #loading {
     font-size: 28px;
     color: #0f0;
+    margin-bottom: 20px;
   }
 
   #screenText {
     white-space: pre-line;
+  }
+
+  /* Footer mit Copyright links und Buttons rechts */
+  #footer {
+    width: 260px;
+    display: flex;
+    justify-content: space-between;
+    color: #0f0;
+    font-size: 12px;
+    user-select: none;
+  }
+
+  button {
+    background-color: #111;
+    border: 1px solid #0f0;
+    color: #0f0;
+    padding: 5px 10px;
+    margin-left: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 12px;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #0f0;
+    color: black;
+  }
+
+  #buttons {
+    display: flex;
   }
 </style>
 </head>
@@ -45,14 +74,24 @@
 
 <div id="loading">Loading...</div>
 
-<div id="iphone">
+<div id="iphone" style="display:none;">
   <div id="screenText"></div>
+</div>
+
+<div id="footer">
+  <div id="copyright">© Felix Ms_strassgang (Österreich)</div>
+  <div id="buttons">
+    <button id="stopBtn">Stop</button>
+    <button id="restartBtn">Restart</button>
+  </div>
 </div>
 
 <script>
   const loadingDiv = document.getElementById('loading');
   const iphoneDiv = document.getElementById('iphone');
   const screenText = document.getElementById('screenText');
+  const stopBtn = document.getElementById('stopBtn');
+  const restartBtn = document.getElementById('restartBtn');
 
   const hackLines = [
     "Initializing hack sequence...",
@@ -62,18 +101,54 @@
     "Access granted. Device hacked."
   ];
 
-  function showHackLines(lines, index = 0) {
-    if (index >= lines.length) return;
-    screenText.textContent += lines[index] + "\n";
-    setTimeout(() => showHackLines(lines, index + 1), 1500);
+  let currentTimeout = null;
+  let lineIndex = 0;
+  let isRunning = false;
+
+  function showHackLines(lines) {
+    if (lineIndex >= lines.length) {
+      isRunning = false;
+      return;
+    }
+    screenText.textContent += lines[lineIndex] + "\n";
+    lineIndex++;
+    currentTimeout = setTimeout(() => showHackLines(lines), 1500);
   }
 
-  // Loading 5 Sekunden anzeigen, dann Hack-Text starten
-  setTimeout(() => {
-    loadingDiv.style.display = 'none';
-    iphoneDiv.style.display = 'block';
-    showHackLines(hackLines);
-  }, 5000);
+  function startHack() {
+    isRunning = true;
+    lineIndex = 0;
+    screenText.textContent = "";
+    loadingDiv.style.display = "block";
+    iphoneDiv.style.display = "none";
+
+    setTimeout(() => {
+      if (!isRunning) return; // Falls schon gestoppt wurde
+      loadingDiv.style.display = "none";
+      iphoneDiv.style.display = "block";
+      showHackLines(hackLines);
+    }, 5000);
+  }
+
+  function stopHack() {
+    isRunning = false;
+    clearTimeout(currentTimeout);
+    loadingDiv.style.display = "none";
+    iphoneDiv.style.display = "block";
+    screenText.textContent = "";
+  }
+
+  stopBtn.addEventListener("click", () => {
+    stopHack();
+  });
+
+  restartBtn.addEventListener("click", () => {
+    stopHack();
+    startHack();
+  });
+
+  // Starte Hack beim Laden der Seite
+  startHack();
 </script>
 
 </body>
