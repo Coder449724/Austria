@@ -4,17 +4,77 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Hacking iPhone Screen</title>
-<link rel="stylesheet" href="style.css" />
+<style>
+  /* Ganz schwarzer Hintergrund und Zentrierung */
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: monospace;
+    color: #0f0;
+  }
+
+  /* iPhone Kasten in der Mitte */
+  #iphone {
+    width: 300px;
+    height: 600px;
+    border: 12px solid #333;
+    border-radius: 40px;
+    box-shadow: 0 0 20px #0f0;
+    background-color: #000;
+    padding: 20px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    display: none; /* Erst nach Loading sichtbar */
+  }
+
+  /* Loading Screen */
+  #loading {
+    font-size: 28px;
+    color: #0f0;
+  }
+
+  #screenText {
+    white-space: pre-line;
+  }
+</style>
 </head>
 <body>
 
 <div id="loading">Loading...</div>
 
-<div id="iphone" style="display:none;">
+<div id="iphone">
   <div id="screenText"></div>
 </div>
 
-<script src="script.js"></script>
+<script>
+  const loadingDiv = document.getElementById('loading');
+  const iphoneDiv = document.getElementById('iphone');
+  const screenText = document.getElementById('screenText');
+
+  const hackLines = [
+    "Initializing hack sequence...",
+    "Accessing device...",
+    "Bypassing security...",
+    "Decrypting files...",
+    "Access granted. Device hacked."
+  ];
+
+  function showHackLines(lines, index = 0) {
+    if (index >= lines.length) return;
+    screenText.textContent += lines[index] + "\n";
+    setTimeout(() => showHackLines(lines, index + 1), 1500);
+  }
+
+  // Loading 5 Sekunden anzeigen, dann Hack-Text starten
+  setTimeout(() => {
+    loadingDiv.style.display = 'none';
+    iphoneDiv.style.display = 'block';
+    showHackLines(hackLines);
+  }, 5000);
+</script>
 
 </body>
 </html>
