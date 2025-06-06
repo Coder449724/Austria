@@ -25,7 +25,7 @@
     background-color: #000;
     padding: 20px;
     overflow-y: auto;
-    white-space: pre-wrap;
+    white-space: nowrap;
     color: white;
     font-weight: bold;
     display: flex;
@@ -39,21 +39,35 @@
     font-weight: bold;
     font-size: 24px;
     line-height: 1.4;
+    white-space: nowrap;
   }
 
-  /* Bunte Farben für Intro Text */
-  .rainbow span {
-    animation: rainbowAnim 3s linear infinite;
+  /* Farbwechsel Animation für ganzen Text */
+  .rainbow-text {
+    background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet);
+    background-size: 1400% 1400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rainbowMove 6s ease infinite;
     display: inline-block;
   }
-  @keyframes rainbowAnim {
-    0% { color: red; }
-    16% { color: orange; }
-    33% { color: yellow; }
-    50% { color: green; }
-    66% { color: blue; }
-    83% { color: indigo; }
-    100% { color: violet; }
+
+  /* Pulsierende Animation nur fürs ® */
+  .pulse {
+    display: inline-block;
+    animation: pulseAnim 1.5s infinite;
+    color: #0f0;
+  }
+
+  @keyframes rainbowMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes pulseAnim {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
   }
 
   #screenText {
@@ -99,12 +113,8 @@
 <body>
 
 <div id="iphone">
-  <div id="introText" class="rainbow">
-    <span>C</span><span>o</span><span>d</span><span>i</span><span>n</span><span>g</span> <br/>
-    <span>a</span><span>n</span> <br/>
-    <br/>
-    <span>b</span><span>y</span> <span>F</span><span>e</span><span>l</span><span>i</span><span>x</span><br/>
-    <span>®</span><br/>
+  <div id="introText">
+    <span class="rainbow-text">Coding an by Felix </span><span class="pulse">®</span>
   </div>
   <div id="screenText" style="display:none;"></div>
 </div>
@@ -158,7 +168,7 @@
     isRunning = false;
     clearTimeout(currentTimeout);
     screenText.style.display = "none";
-    introTextDiv.style.display = "block";
+    introTextDiv.style.display = "flex";
     screenText.textContent = "";
   }
 
@@ -168,7 +178,7 @@
 
   restartBtn.addEventListener("click", () => {
     stopHack();
-    setTimeout(startHack, 0); // Sofort starten, kein Loading mehr
+    setTimeout(startHack, 0);
   });
 
   // Intro 5 Sekunden zeigen, dann Hack starten
