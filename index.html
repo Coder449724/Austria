@@ -145,6 +145,36 @@
   #buttons {
     display: flex;
   }
+
+  /* Popup Hintergrund */
+  #popupOverlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: rgba(0,0,0,0.75);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+
+  /* Popup Fenster */
+  #popup {
+    background-color: #111;
+    border: 2px solid #0f0;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 300px;
+    color: #0f0;
+    text-align: center;
+    font-family: monospace;
+    box-shadow: 0 0 15px #0f0;
+  }
+
+  #popup button {
+    margin-top: 15px;
+    width: 100%;
+  }
 </style>
 </head>
 <body>
@@ -165,6 +195,14 @@
   </div>
 </div>
 
+<!-- Popup -->
+<div id="popupOverlay">
+  <div id="popup">
+    <p>Would you like to learn this too? Then join our Discord and discover different methods.</p>
+    <button id="closePopup">Close</button>
+  </div>
+</div>
+
 <script>
   const introTextDiv = document.getElementById('introText');
   const screenText = document.getElementById('screenText');
@@ -172,6 +210,8 @@
   const restartBtn = document.getElementById('restartBtn');
   const iphoneDiv = document.getElementById('iphone');
   const skullDiv = document.getElementById('skull');
+  const popupOverlay = document.getElementById('popupOverlay');
+  const closePopupBtn = document.getElementById('closePopup');
 
   const hackLines = [
     "Initializing hack sequence...",
@@ -206,6 +246,12 @@
       skullDiv.style.animation = "fadeInSkull 1s forwards";
       iphoneDiv.classList.add('blurred');
       isRunning = false;
+
+      // Popup nach kurzer Verzögerung zeigen (z.B. 1.5 Sekunden)
+      setTimeout(() => {
+        popupOverlay.style.display = "flex";
+      }, 1500);
+
       return;
     }
     typeLine(lines[lineIndex], () => {
@@ -224,6 +270,7 @@
     skullDiv.style.animation = "";
     iphoneDiv.classList.remove('blurred');
     screenText.style.display = "block";
+    popupOverlay.style.display = "none"; // Popup ausblenden falls offen
     showHackLines(hackLines);
   }
 
@@ -236,6 +283,7 @@
     skullDiv.style.animation = "";
     iphoneDiv.classList.remove('blurred');
     screenText.textContent = "";
+    popupOverlay.style.display = "none";
   }
 
   stopBtn.addEventListener("click", () => {
@@ -245,6 +293,10 @@
   restartBtn.addEventListener("click", () => {
     stopHack();
     setTimeout(startHack, 0);
+  });
+
+  closePopupBtn.addEventListener("click", () => {
+    popupOverlay.style.display = "none";
   });
 
   // Intro 5 Sekunden zeigen, dann Hack starten
