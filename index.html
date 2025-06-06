@@ -33,6 +33,12 @@
     align-items: center;
     text-align: center;
     font-size: 24px;
+    position: relative;
+    transition: filter 0.5s ease;
+  }
+
+  #iphone.blurred {
+    filter: blur(6px);
   }
 
   #introText {
@@ -78,6 +84,18 @@
     text-align: left;
   }
 
+  #skull {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 120px;
+    color: red;
+    display: none;
+    pointer-events: none;
+    user-select: none;
+  }
+
   /* Footer mit Copyright links und Buttons rechts */
   #footer {
     width: 260px;
@@ -117,6 +135,7 @@
     <span class="rainbow-text">Coding an by Felix </span><span class="pulse">®</span>
   </div>
   <div id="screenText" style="display:none;"></div>
+  <div id="skull">💀</div>
 </div>
 
 <div id="footer">
@@ -132,6 +151,8 @@
   const screenText = document.getElementById('screenText');
   const stopBtn = document.getElementById('stopBtn');
   const restartBtn = document.getElementById('restartBtn');
+  const iphoneDiv = document.getElementById('iphone');
+  const skullDiv = document.getElementById('skull');
 
   const hackLines = [
     "Initializing hack sequence...",
@@ -147,6 +168,10 @@
 
   function showHackLines(lines) {
     if (lineIndex >= lines.length) {
+      // Am Ende Totenschädel anzeigen & Display verschwimmen lassen
+      screenText.textContent += "\n";
+      skullDiv.style.display = "block";
+      iphoneDiv.classList.add('blurred');
       isRunning = false;
       return;
     }
@@ -160,6 +185,8 @@
     lineIndex = 0;
     screenText.textContent = "";
     introTextDiv.style.display = "none";
+    skullDiv.style.display = "none";
+    iphoneDiv.classList.remove('blurred');
     screenText.style.display = "block";
     showHackLines(hackLines);
   }
@@ -169,6 +196,8 @@
     clearTimeout(currentTimeout);
     screenText.style.display = "none";
     introTextDiv.style.display = "flex";
+    skullDiv.style.display = "none";
+    iphoneDiv.classList.remove('blurred');
     screenText.textContent = "";
   }
 
