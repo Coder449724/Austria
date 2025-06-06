@@ -1,23 +1,43 @@
-# 📱 Felix Website Projekt
+# Hacking iPhone Screen
 
-Dies ist ein modernes Webprojekt mit animiertem Handy-Bildschirm und dynamischen Bildern – perfekt für TikTok oder Schulprojekte!
+Eine einfache statische Webseite mit schwarzem Hintergrund, die in der Mitte einen iPhone-ähnlichen Bildschirm zeigt.  
+Am Anfang erscheint ein Loading-Screen, danach werden nacheinander „Hacking“-Texte angezeigt, so als würde das Gerät gehackt.
 
-## 🔧 Technologie
+---
 
-- HTML, CSS, JavaScript
-- Bilder & Animationen
-- Hosting über GitHub + Vercel
+## So nutzt du das Projekt
 
-## 🚀 Live-Demo
+1. Einfach die Datei `index.html` lokal öffnen oder das Repo hosten (z.B. via Vercel, GitHub Pages etc.)
 
-Sobald du es auf Vercel deployt hast, erscheint hier dein Link.
+2. Es wird automatisch ein Loading-Screen angezeigt (3 Sekunden) und danach die „Hacking“-Texte.
 
-## 🧠 Aufbau
+---
 
-- `index.html` – Hauptdatei der Website
-- `style.css` – Design und Animationen
-- `img/` – Bilder, die im Handy erscheinen
+## Deployment auf Vercel
 
-## 👨‍💻 Erstellt von
+- Repo auf GitHub hochladen
+- Vercel mit GitHub verbinden
+- Automatisches Deployment startet bei jedem Push
 
-Felix
+---
+
+## Tech Stack
+
+- HTML
+- CSS
+- JavaScript
+
+---
+
+## Vorschläge
+
+- Typing-Animation hinzufügen
+- Echtes iPhone-Design mit Bild einfügen
+- Mehr „Hacking“-Texte oder zufällige Befehle einbauen
+
+---
+
+## Autor
+
+Felix Ms_strassgang  Graz Östereich 
+
