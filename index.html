@@ -26,17 +26,42 @@
     padding: 20px;
     overflow-y: auto;
     white-space: pre-wrap;
-    margin-bottom: 20px;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 24px;
   }
 
-  #loading {
-    font-size: 28px;
-    color: #0f0;
-    margin-bottom: 20px;
+  #introText {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 1.4;
+  }
+
+  /* Bunte Farben für Intro Text */
+  .rainbow span {
+    animation: rainbowAnim 3s linear infinite;
+    display: inline-block;
+  }
+  @keyframes rainbowAnim {
+    0% { color: red; }
+    16% { color: orange; }
+    33% { color: yellow; }
+    50% { color: green; }
+    66% { color: blue; }
+    83% { color: indigo; }
+    100% { color: violet; }
   }
 
   #screenText {
     white-space: pre-line;
+    font-size: 14px;
+    color: #0f0;
+    font-weight: normal;
+    text-align: left;
   }
 
   /* Footer mit Copyright links und Buttons rechts */
@@ -47,6 +72,7 @@
     color: #0f0;
     font-size: 12px;
     user-select: none;
+    margin-top: 10px;
   }
 
   button {
@@ -72,10 +98,15 @@
 </head>
 <body>
 
-<div id="loading">Loading...</div>
-
-<div id="iphone" style="display:none;">
-  <div id="screenText"></div>
+<div id="iphone">
+  <div id="introText" class="rainbow">
+    <span>C</span><span>o</span><span>d</span><span>i</span><span>n</span><span>g</span> <br/>
+    <span>a</span><span>n</span> <br/>
+    <br/>
+    <span>b</span><span>y</span> <span>F</span><span>e</span><span>l</span><span>i</span><span>x</span><br/>
+    <span>®</span><br/>
+  </div>
+  <div id="screenText" style="display:none;"></div>
 </div>
 
 <div id="footer">
@@ -87,8 +118,7 @@
 </div>
 
 <script>
-  const loadingDiv = document.getElementById('loading');
-  const iphoneDiv = document.getElementById('iphone');
+  const introTextDiv = document.getElementById('introText');
   const screenText = document.getElementById('screenText');
   const stopBtn = document.getElementById('stopBtn');
   const restartBtn = document.getElementById('restartBtn');
@@ -119,22 +149,16 @@
     isRunning = true;
     lineIndex = 0;
     screenText.textContent = "";
-    loadingDiv.style.display = "block";
-    iphoneDiv.style.display = "none";
-
-    setTimeout(() => {
-      if (!isRunning) return; // Falls schon gestoppt wurde
-      loadingDiv.style.display = "none";
-      iphoneDiv.style.display = "block";
-      showHackLines(hackLines);
-    }, 5000);
+    introTextDiv.style.display = "none";
+    screenText.style.display = "block";
+    showHackLines(hackLines);
   }
 
   function stopHack() {
     isRunning = false;
     clearTimeout(currentTimeout);
-    loadingDiv.style.display = "none";
-    iphoneDiv.style.display = "block";
+    screenText.style.display = "none";
+    introTextDiv.style.display = "block";
     screenText.textContent = "";
   }
 
@@ -144,11 +168,14 @@
 
   restartBtn.addEventListener("click", () => {
     stopHack();
-    startHack();
+    setTimeout(startHack, 0); // Sofort starten, kein Loading mehr
   });
 
-  // Starte Hack beim Laden der Seite
-  startHack();
+  // Intro 5 Sekunden zeigen, dann Hack starten
+  setTimeout(() => {
+    startHack();
+  }, 5000);
+
 </script>
 
 </body>
